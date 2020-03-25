@@ -1,0 +1,73 @@
+.parkGreen {
+  color: #6fa249;
+}
+
+.title {
+  text-align: center;
+}
+.row {
+  display: flex;
+  width: 85vw;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+.column {
+  flex: 50%;
+  padding: 10px;
+}
+
+.image {
+  width: 100%;
+}
+
+button {
+  transition-duration: 0.4s;
+  background-color: #6fa249;
+  border-radius: 2px;
+  padding: 12px 28px;
+  color: white;
+  margin-left: 35%;
+}
+
+button:hover {
+  cursor: pointer;
+  background-color: rgb(35, 86, 0);
+}
+
+.footer {
+  position: fixed;
+  background-color: #6fa249;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  color: white;
+  text-align: center;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.nav {
+  float: left;
+}
+
+#search {
+  padding-top: 100px;
+  text-align: center;
+  font-size: 20px;
+}
+
+#search input {
+  padding: 12px 20px;
+  radius: 2px;
+  border: 2px solid #6fa249;
+  background-image: url("imgs/pin_icon.jpg");
+  background-position: 10px 10px;
+  background-repeat: no-repeat;
+}
+
+input {
+  width: 75vw;
+}
