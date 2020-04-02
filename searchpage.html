@@ -3,28 +3,66 @@
   <head>
     <title>Search for a Trail</title>
     <link rel="stylesheet" href="css/styles.css" type="text/css" />
+    <style>
+      @import url("https://fonts.googleapis.com/css?family=Righteous&display=swap");
+      @import url("https://fonts.googleapis.com/css?family=Sen&display=swap");
+    </style>
   </head>
 
   <body>
     <div class="nav">
       <a href="index.html"><button>Home</button></a>
     </div>
-    <div class="title parkGreen"><h1>Find a Park Trail</h1></div>
+    <div class="title parkGreen"><h1>Find a Park</h1></div>
     <div id="search">
       <form>
-        <label for="location" class="parkGreen">Enter your location: </label>
+        <label for="location" class="parkGreen">Enter your zipcode: </label>
         <input type="text" id="location" />
+        <label for="parkTypes" class="parkGreen" />
       </form>
+      <!-- <div id="map"></div> -->
+      <div class="parkGreen hidden" id="dropdownMenu">
+        <form>
+          <label for="parkType">Narrow down by park type:</label>
+          <select id="parkType" name="parkType"> </select>
+        </form>
+      </div>
     </div>
+    <div id="results" class="hidden">
+      <div id="resultsZip" class="parkGreen"></div>
+      <table class="parkGreen">
+        <thead>
+          <tr id="tableHeaders">
+            <th id="parkName">Park Name</th>
+            <th id="parkType">What kinda park?</th>
+            <th id="directions">Directions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
     <div class="footer">
       <p>Footer Content, Links, and such</p>
     </div>
+
     <script
       src="https://code.jquery.com/jquery-3.4.1.min.js"
       integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
       crossorigin="anonymous"
     ></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="js/index.js"></script>
+    <script src="js/index_parkzip_justzip.js"></script>
+    <!-- <script
+      async
+      defer
+      type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBWO4lVIUOsXN0qZc5wa1deKEDGsIf_Aa8&libraries=places"
+    ></script> -->
+    <!-- <script
+      async
+      defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBWO4lVIUOsXN0qZc5wa1deKEDGsIf_Aa8&callback=initMap"
+    ></script> -->
   </body>
 </html>

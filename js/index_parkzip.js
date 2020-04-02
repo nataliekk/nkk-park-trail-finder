@@ -10,7 +10,7 @@ $(function() {
 
     const userLocation = $("#location").val();
     search(userLocation);
-    makeParksDataAvailable();
+    findParks();
     //  mapDistance(userCoordinates, parkData);
     // console.log("submit");
     // console.log($("#location").val());
@@ -42,9 +42,9 @@ $(function() {
   }
 
   // load parks data to console
-  function makeParksDataAvailable() {
+  function findParks() {
     $.ajax({
-      url: "https://data.cityofnewyork.us/resource/vjbm-hsyr.json",
+      url: "https://data.cityofnewyork.us/resource/enfh-gkve.json",
       type: "GET",
       data: {
         $limit: 10000,
@@ -66,9 +66,20 @@ $(function() {
         // for (i = 0; i < parks.length; i++) {
         //   let indivDistance = mapDistance(userLocation, parkCoordinates[i]);
         //   distance.push(indivDistance);
+
+        console.log(
+          parks.map(park => {
+            return getParkCoordinates(park);
+          })
+        );
+
         parks = parks.map(park => {
-          return mapDistanceForOnePark(userCoordinates, park);
+          return mapDistanceForOnePark(
+            userCoordinates,
+            getParkCoordinates(park)
+          );
         });
+
         console.log(parks);
         const parksSorted = parks
           .slice()
@@ -84,7 +95,7 @@ $(function() {
   }
 
   function getParkCoordinates(park) {
-    return park.shape.coordinates[0][0];
+    return park.multipolygon.coordinates[0][0][0];
   }
 
   function mapDistance(userLocation, parks) {

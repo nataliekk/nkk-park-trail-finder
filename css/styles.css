@@ -1,3 +1,16 @@
+@font-face {
+  font-family: "National-Park";
+  font-weight: bold;
+  src: url("NationalPark/NationalPark-Heavy.otf") format("opentype");
+}
+
+body {
+  font-family: "Righteous";
+}
+
+p {
+  font-family: "Sen";
+}
 .parkGreen {
   color: #6fa249;
 }
@@ -28,6 +41,7 @@ button {
   padding: 12px 28px;
   color: white;
   margin-left: 35%;
+  font-family: "Righteous";
 }
 
 button:hover {
@@ -63,11 +77,41 @@ button:hover {
   padding: 12px 20px;
   radius: 2px;
   border: 2px solid #6fa249;
-  background-image: url("imgs/pin_icon.jpg");
+  width: 100px;
+  /* background-image: url("imgs/pin_icon.jpg"); */
   background-position: 10px 10px;
   background-repeat: no-repeat;
 }
 
 input {
   width: 75vw;
+}
+
+#map {
+  height: 100%;
+}
+
+.map {
+  width: 300px;
+  height: 300px;
+}
+
+#results {
+  text-align: center;
+  display: inline-block;
+  /* align-items: center;
+  justify-content: center; */
+  margin-left: 25vw;
+  margin-right: 25vw;
+}
+
+th {
+  font-size: 20px;
+  height: 30px;
+}
+
+th,
+td {
+  padding: 15px;
+  border-bottom: 2px dashed #6fa249;
 }

@@ -1,0 +1,5 @@
+1. user enters Location
+2. upon submit, location turned into latitude longitude
+3. HOW TO COMPARE LAT/LONG TO PARK DATA?
+      OR
+      3B. HOW TO FIND DISTANCE BETWEEN 2 LAT/LONGS AND THEN SORT BY DISTANCE
