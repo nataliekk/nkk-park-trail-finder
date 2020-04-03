@@ -1,13 +1,27 @@
 $(function() {
   let parks = [];
-  let userCoordinates = [];
   let userZip;
+  $("#tableHeaders").hide();
+  $("#dropdownMenu").hide();
+
   $("form").submit(e => {
     e.preventDefault();
+    console.log("submitting");
+    //  clearUi();
     userZip = $("#location").val();
     console.log(userZip);
     findParksinZip(userZip);
     clearField();
+  });
+
+  $("#parkType").change(e => {
+    const parkFilter = $("#parkType option:selected").text();
+    const filteredParks = parks.filter(park => {
+      return park.typecategory === parkFilter;
+    });
+    console.log(parkFilter);
+    console.log(filteredParks);
+    updateUi(filteredParks);
   });
 
   // load parks data to be available
@@ -23,7 +37,6 @@ $(function() {
     })
       .done(data => {
         // make parks data the data return
-
         parks = data;
         console.log(parks);
         updateUi(parks);
@@ -44,7 +57,7 @@ $(function() {
       <tr>
       <td>${park.signname}</td>
       <td>${park.typecategory}</td>
-      <td><a href="https://www.google.com/maps/place/${park.signname}" target="_blank">"Get Directions"</a></td>
+      <td><a href="https://www.google.com/maps/search/${park.signname}" target="_blank">See on Google Maps</a></td>
       </tr>
       `;
       } else {
@@ -52,21 +65,32 @@ $(function() {
     });
     console.log(displayRows);
     $("#resultsZip").html(`<h2>Park properties in ${userZip}</h2>`);
-    $("#results").toggleClass("hidden");
+    $("#tableHeaders").show();
     $("tbody").html(displayRows);
   }
+
   function clearField() {
     $("input").val("");
   }
 
   function reset() {
     $("#resultsZip").html("");
-    $("#results").toggleClass("hidden");
+    //  $("#results").toggleClass("hidden");
     $("tbody").html("");
   }
+
   function showDropDown(parks) {
-    $("#dropdownMenu").toggleClass("hidden");
-    const parkValues = parks.map(park => {
+    $("#dropdownMenu").show();
+    const definedParks = parks.filter(park => {
+      if (
+        park.signname !== undefined &&
+        park.signname !== "Park" &&
+        park.typecategory !== undefined
+      ) {
+        return park;
+      }
+    });
+    const parkValues = definedParks.map(park => {
       return park.typecategory;
     });
     const distinct = (value, index, self) => {
@@ -80,6 +104,7 @@ $(function() {
     console.log(dropdownHtml);
     $("#parkType").html(`<option value="All">All</option>` + `${dropdownHtml}`);
   }
+
   function clearUi() {
     $("#resultsZip").html("");
     $("#results").html("");

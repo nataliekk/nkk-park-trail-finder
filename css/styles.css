@@ -1,3 +1,8 @@
+html,
+body {
+  width: 100%;
+}
+
 @font-face {
   font-family: "National-Park";
   font-weight: bold;
@@ -57,6 +62,12 @@ button:hover {
   width: 100%;
   color: white;
   text-align: center;
+  display: inline-block;
+  float: left;
+}
+
+.footer a {
+  padding: 0 30px 0 30px;
 }
 
 .hidden {
@@ -67,10 +78,16 @@ button:hover {
   float: left;
 }
 
-#search {
-  padding-top: 100px;
+#search,
+#results {
+  padding-top: 10px;
   text-align: center;
+  font-size: 15px;
+}
+
+#search {
   font-size: 20px;
+  padding-top: 100px;
 }
 
 #search input {
@@ -96,14 +113,11 @@ input {
   height: 300px;
 }
 
-#results {
+/* #results {
   text-align: center;
   display: inline-block;
   /* align-items: center;
-  justify-content: center; */
-  margin-left: 25vw;
-  margin-right: 25vw;
-}
+  justify-content: center; }*/
 
 th {
   font-size: 20px;
@@ -114,4 +128,9 @@ th,
 td {
   padding: 15px;
   border-bottom: 2px dashed #6fa249;
+}
+
+table {
+  padding-bottom: 50px;
+  margin: auto;
 }
