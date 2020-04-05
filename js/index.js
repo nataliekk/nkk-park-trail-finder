@@ -1,132 +1,113 @@
 $(function() {
   let parks = [];
-  let userCoordinates = [];
+  let userZip;
+  $("#tableHeaders").hide();
+  $("#dropdownMenu").hide();
+
   $("form").submit(e => {
     e.preventDefault();
-    // GET Lat/Long from submitted address
-    // const user = { lat: 40.672298, lng: -73.964079 };
-    // const park = [-77.5198549721228, 40.11248843537908];
-    // console.log(haversine_distance(user, park));
-
-    const userLocation = $("#location").val();
-    search(userLocation);
-    makeParksDataAvailable();
-    //  mapDistance(userCoordinates, parkData);
-    // console.log("submit");
-    // console.log($("#location").val());
-    // mapDistance();
-    // find park trail with shortest distance to start
-
-    // load results into html
+    console.log("submitting");
+    //  clearUi();
+    userZip = $("#location").val();
+    console.log(userZip);
+    findParksinZip(userZip);
+    clearField();
   });
 
-  function search(query) {
-    const url = "https://api.geocod.io/v1.4/geocode";
-    const apiKey = "50ec507279f5c7f7730ffee07e20e3f7f8ec230";
+  $("#parkType").change(e => {
+    const parkFilter = $("#parkType option:selected").text();
+    const filteredParks = parks.filter(park => {
+      return park.typecategory === parkFilter;
+    });
+    console.log(parkFilter);
+    console.log(filteredParks);
+    updateUi(filteredParks);
+  });
 
+  // load parks data to be available
+  function findParksinZip(zipcode) {
     $.ajax({
-      url: url,
-      type: "GET",
-      data: { api_key: apiKey, q: query }
-    })
-      .done(response => {
-        // execute this function if request is successful
-        // console.log(response.results[0].location);
-        userCoordinates = response.results[0].location;
-      })
-      .fail(() => {
-        // execute this function if request fails
-        alert("error occurred");
-      });
-    // console.log(userCoordinates);
-  }
-
-  // load parks data to console
-  function makeParksDataAvailable() {
-    $.ajax({
-      url: "https://data.cityofnewyork.us/resource/vjbm-hsyr.json",
+      url: "https://data.cityofnewyork.us/resource/enfh-gkve.json",
       type: "GET",
       data: {
         $limit: 10000,
-        $$app_token: "cmiHbruuUoqPfSxhjiCnOrnSt"
+        $$app_token: "cmiHbruuUoqPfSxhjiCnOrnSt",
+        zipcode: zipcode
       }
     })
       .done(data => {
         // make parks data the data return
         parks = data;
         console.log(parks);
-        // get just the coordinates for each park
-        //  const parkCoordinates = getParkCoordinates(data);
-
-        // const userLocation = $("#location").val();
-        // console.log(userLocation)
-        // console.log(parkCoordinates);
-        // let i;
-        // let distance = [];
-        // for (i = 0; i < parks.length; i++) {
-        //   let indivDistance = mapDistance(userLocation, parkCoordinates[i]);
-        //   distance.push(indivDistance);
-        parks = parks.map(park => {
-          return mapDistanceForOnePark(userCoordinates, park);
-        });
-        console.log(parks);
-        const parksSorted = parks
-          .slice()
-          .sort((a, b) => {
-            return b.distance - a.distance;
-          })
-          .reverse();
-        console.log(parksSorted);
+        updateUi(parks);
+        showDropDown(parks);
+        // showDropDown(parks);
+        //  findParksinZip(parks, zipcode);
       })
       .fail(() => {
         alert("error occurred");
       });
   }
 
-  function getParkCoordinates(park) {
-    return park.shape.coordinates[0][0];
+  function updateUi(parks) {
+    console.log(parks);
+    const displayRows = parks.map(park => {
+      if (park.signname !== undefined && park.signname !== "Park") {
+        return `
+      <tr>
+      <td>${park.signname}</td>
+      <td>${park.typecategory}</td>
+      <td><a href="https://www.google.com/maps/search/${park.signname}" target="_blank">See on Google Maps</a></td>
+      </tr>
+      `;
+      } else {
+      }
+    });
+    console.log(displayRows);
+    $("#resultsZip").html(`<h2>Park properties in ${userZip}</h2>`);
+    $("#tableHeaders").show();
+    $("tbody").html(displayRows);
   }
 
-  function mapDistance(userLocation, parks) {
-    return haversine_distance(userLocation, parks);
+  function clearField() {
+    $("input").val("");
   }
 
-  function mapDistanceForOnePark(userCoordinates, park) {
-    const distance = haversine_distance(
-      userCoordinates,
-      getParkCoordinates(park)
-    );
-    park.distance = distance;
-    // console.log(park);
-    return park;
+  function reset() {
+    $("#resultsZip").html("");
+    //  $("#results").toggleClass("hidden");
+    $("tbody").html("");
   }
 
-  // to find distance between two lat/long
-  function haversine_distance(mk1, mk2) {
-    var R = 3958.8; // Radius of the Earth in miles
-    var rlat1 = mk1.lat * (Math.PI / 180); // Convert degrees to radians
-    //  console.log(mk1.lat);
+  function showDropDown(parks) {
+    $("#dropdownMenu").show();
+    const definedParks = parks.filter(park => {
+      if (
+        park.signname !== undefined &&
+        park.signname !== "Park" &&
+        park.typecategory !== undefined
+      ) {
+        return park;
+      }
+    });
+    const parkValues = definedParks.map(park => {
+      return park.typecategory;
+    });
+    const distinct = (value, index, self) => {
+      return self.indexOf(value) === index;
+    };
+    const uniqueParkValues = parkValues.filter(distinct).sort();
+    const dropdownHtml = uniqueParkValues.map(uniqueParkValue => {
+      return `
+            <option value="${uniqueParkValue}">${uniqueParkValue}</option>`;
+    });
+    console.log(dropdownHtml);
+    $("#parkType").html(`<option value="All">All</option>` + `${dropdownHtml}`);
+  }
 
-    var rlat2 = mk2[1] * (Math.PI / 180); // Convert degrees to radians
-    // console.log(rlat2);
-    //  console.log(mk2[1]);
-    var difflat = rlat2 - rlat1; // Radian difference (latitudes)
-    // console.log(difflat);
-    var difflon = mk2[0] - mk1.lng * (Math.PI / 180);
-    // Radian difference (longitudes)
-    // console.log(difflon);
-    var d =
-      2 *
-      R *
-      Math.asin(
-        Math.sqrt(
-          Math.sin(difflat / 2) * Math.sin(difflat / 2) +
-            Math.cos(rlat1) *
-              Math.cos(rlat2) *
-              Math.sin(difflon / 2) *
-              Math.sin(difflon / 2)
-        )
-      );
-    return d;
+  function clearUi() {
+    $("#resultsZip").html("");
+    $("#results").html("");
+    $("tbody").html("");
   }
 });
